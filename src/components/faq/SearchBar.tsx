@@ -20,17 +20,21 @@ const SearchBar = ({
   const fetchFaqs = _.debounce(async (keyword: string) => {
     if (keyword.length > 0 && keyword !== prevKeyword) {
       setLoading(true);
-      const data = await getFaqs(keyword);
 
-      if (data && data.faq) {
-        const { faq } = data;
-        setData(faq);
-      } else {
+      try {
+        const data = await getFaqs(keyword);
+        if (data && data.faq) {
+          const { faq } = data;
+          setData(faq);
+        } else {
+          setData([]);
+        }
+      } catch (err: any) {
         setData([]);
+      } finally {
+        setPrevKeyword(keyword);
+        setLoading(false);
       }
-
-      setPrevKeyword(keyword);
-      setLoading(false);
     }
   }, 1000);
 
