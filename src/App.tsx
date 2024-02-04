@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 
-import Loading from "./components/faq/Loading";
+import LoadingComponent from "./components/faq/Loading";
+import EmptyComponent from "./components/faq/Empty";
 
 import { useLoading } from "./hooks/faq.hook";
 
@@ -13,9 +14,15 @@ import FAQList from "./components/faq/FAQList";
 import type { FAQ } from "./types/faq.type";
 
 const App = () => {
+  const [firstRender, setFirstRender] = useState(true);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
 
   const { loading, setLoading } = useLoading();
+
+  const setData = (faqs: FAQ[]) => {
+    if (firstRender) setFirstRender(false);
+    setFaqs(faqs);
+  };
 
   const backgroundImageRef = useRef<HTMLImageElement>(null);
 
@@ -29,8 +36,14 @@ const App = () => {
           />
           <HeaderText>도와줘요! 신라님!</HeaderText>
         </FaqHeader>
-        <SearchBar setLoading={setLoading} setData={setFaqs} />
-        {loading ? <Loading /> : <FAQList faqs={faqs} />}
+        <SearchBar setLoading={setLoading} setData={setData} />
+        {loading ? (
+          <LoadingComponent />
+        ) : faqs.length > 0 ? (
+          <FAQList faqs={faqs} />
+        ) : (
+          !firstRender && <EmptyComponent />
+        )}
         <BackgroundCharImage
           ref={backgroundImageRef}
           src="images/standard/shinra.png"

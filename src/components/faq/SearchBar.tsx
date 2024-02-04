@@ -12,7 +12,7 @@ const SearchBar = ({
   setData,
   setLoading,
 }: {
-  setData: Dispatch<SetStateAction<FAQ[]>>;
+  setData: (faqs: FAQ[]) => void;
   setLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [prevKeyword, setPrevKeyword] = useState("");
