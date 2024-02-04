@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useRef } from "react";
 
-function App() {
+import Loading from "./components/faq/Loading";
+
+import { useLoading } from "./hooks/faq.hook";
+
+import { PageWrapper, BackgroundCharImage } from "./styles/index.style";
+import { FaqHeader, HeaderImage, HeaderText } from "./styles/faq.style";
+
+import SearchBar from "./components/faq/SearchBar";
+import FAQList from "./components/faq/FAQList";
+
+import type { FAQ } from "./types/faq.type";
+
+const App = () => {
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+
+  const { loading, setLoading } = useLoading();
+
+  const backgroundImageRef = useRef<HTMLImageElement>(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <PageWrapper>
+        <FaqHeader>
+          <HeaderImage
+            src="images/chibi/sd_shinra.png"
+            alt="신라 치비 이미지"
+          />
+          <HeaderText>도와줘요! 신라님!</HeaderText>
+        </FaqHeader>
+        <SearchBar setLoading={setLoading} setData={setFaqs} />
+        {loading ? <Loading /> : <FAQList faqs={faqs} />}
+        <BackgroundCharImage
+          ref={backgroundImageRef}
+          src="images/standard/shinra.png"
+          onScroll={(e) => console.log(document.body.scrollTop)}
+          alt="신라 배경 이미지"
+        />
+      </PageWrapper>
+    </>
   );
-}
+};
 
 export default App;
