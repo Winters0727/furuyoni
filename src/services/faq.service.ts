@@ -3,15 +3,11 @@ import { https } from "./https";
 import type { FAQSuccessResponse } from "../types/faq.type";
 
 export const getFaqs = async (keyword: string = "") => {
-  try {
-    const { data } = await https.get<FAQSuccessResponse>(
-      `/faq?keyword=${encodeURIComponent(keyword)}`
-    );
+  const { data } = await https.get<FAQSuccessResponse>(
+    `/faq?keyword=${encodeURIComponent(keyword)}`
+  );
 
-    return data;
-  } catch (err: any) {
-    console.log(err);
-  }
+  return data;
 };
 
 // export const getFaqs = async (
